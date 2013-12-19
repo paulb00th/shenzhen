@@ -99,6 +99,7 @@ command :build do |c|
       if projects.empty?
         say_error "No Xcode projects or workspaces found in current directory" and abort
       else
+        puts "projects - #{projects}"
         if projects.length == 1
           @project = projects.first
         else
@@ -106,6 +107,7 @@ command :build do |c|
         end
       end
     else
+      puts "workspaces - #{workspaces}"
       if workspaces.length == 1
         @workspace = workspaces.first
       else
@@ -117,6 +119,7 @@ command :build do |c|
   def determine_scheme!
     say_error "No schemes found in Xcode project or workspace" and abort unless @xcodebuild_info.schemes
 
+    puts "schemes - #{@xcodebuild_info.schemes}"
     if @xcodebuild_info.schemes.length == 1
       @scheme = @xcodebuild_info.schemes.first
     else
@@ -126,6 +129,7 @@ command :build do |c|
 
   def determine_configuration!
     configurations = @xcodebuild_info.build_configurations rescue []
+    puts "configurations - #{configurations}"
     if configurations.nil? or configurations.empty? or configurations.include?("Debug")
       @configuration = "Debug"
     elsif configurations.length == 1
@@ -136,6 +140,7 @@ command :build do |c|
       say_warning "Configuration was not passed, defaulting to #{@configuration}"
     else
       @configuration = choose "Select a configuration:", *configurations
+      puts @configuration
     end
   end
 end
